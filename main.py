@@ -3,10 +3,11 @@
 # Fortune in a Pot — make.fun entry writer.
 # Running this script produces exactly one line in /output/entry.txt.
 
+from os import environ
 from pathlib import Path
 
 TEXT = "Good news: you will outgrow this pot. Bad news: your human still waters you like a rumor."
-TARGET = Path("/output/entry.txt")
+TARGET = Path(environ.get("ENTRY_OUTPUT", "/output/entry.txt"))
 LIMIT = 120
 
 
