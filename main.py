@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""Entry for make.fun: Fortune in a Pot."""
+# SPDX-License-Identifier: MIT
+# Fortune in a Pot — make.fun entry writer.
+# Running this script produces exactly one line in /output/entry.txt.
 
-from os import makedirs
+from pathlib import Path
 
-ENTRY = (
-    "Good news: you will outgrow this pot. Bad news: your human still waters you like a rumor."
-)
-
-
-def write_entry() -> None:
-    """Write the entry to /output/entry.txt, nothing else."""
-    if len(ENTRY) > 120 or not ENTRY.strip():
-        raise ValueError("entry must be a non-empty line of at most 120 characters")
-    if "\n" in ENTRY or "\r" in ENTRY:
-        raise ValueError("entry must be a single line")
-    makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8", newline="") as handle:
-        handle.write(ENTRY)
+TEXT = "Good news: you will outgrow this pot. Bad news: your human still waters you like a rumor."
+TARGET = Path("/output/entry.txt")
+LIMIT = 120
 
 
-if __name__ == "__main__":  # run as a script
-    write_entry()
+def main() -> None:
+    line = TEXT.strip()
+    assert line, "entry may not be empty"
+    assert len(line) <= LIMIT, "entry exceeds 120 characters"
+    assert "\n" not in line and "\r" not in line, "entry must stay on one line"
+    TARGET.parent.mkdir(parents=True, exist_ok=True)
+    TARGET.write_text(line, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()
